@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import novelRoutes from './routes/novel.routes.mjs'
+import swaggerSpec from './docs/swagger.mjs'
+import swaggerUi from 'swagger-ui-express'
 
 export default class Server {
   #app
@@ -12,6 +14,7 @@ export default class Server {
 
     this.#initializeMiddlewares()
     this.#initializeRoutes()
+    this.#initializeSwagger()
   }
 
   #initializeMiddlewares() {
@@ -21,6 +24,10 @@ export default class Server {
 
   #initializeRoutes() {
     this.#app.use('/novels', novelRoutes)
+  }
+
+  #initializeSwagger() {
+    this.#app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
   }
 
   run() {
